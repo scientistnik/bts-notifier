@@ -1,0 +1,26 @@
+greeting: Bienvenue
+menu:
+  add_account: ✅ Ajouter un compte
+  remove_account: ❌ Supprimer le compte
+  show_accounts: 📝 Afficher les comptes
+  settings: 🛠 Paramètres
+settings: Rien ici...
+ops:
+  transfer: Transfert
+  sent: envoyé à
+  order_create: Commander créer
+  sell: vendre
+  receive: recevoir
+  fill_order: Remplir l'ordre
+  pays: paie
+  receives: reçoit
+write_account: S'il vous plaît, écrivez le compte de nom
+cancel: Annuler
+delete_account: S'il vous plaît, sélectionnez le compte à supprimer
+not_accounts: Vous n'avez rien à enlever
+removed: supprimé
+your_subs: Vos abonnements
+empty_subs: Vous n'êtes pas abonné
+subs_canceled: S'abonner annulé
+added_sub: Ajouter un abonnement au compte
+no_meaning: Ce que vous voulez dire?

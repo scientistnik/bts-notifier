@@ -1,0 +1,26 @@
+greeting: Welcome
+menu:
+  add_account: ✅ Add Account
+  remove_account: ❌ Remove Account
+  show_accounts: 📝 Show Accounts
+  settings: 🛠 Settings
+settings: Nothing here...
+ops:
+  transfer: Transfer
+  sent: sent to
+  order_create: Order create
+  sell: sell
+  receive: receive
+  fill_order: Fill order
+  pays: pays
+  receives: receives
+write_account: Please, write name account
+cancel: Cancel
+delete_account: Please, select account to delete
+not_accounts: You have nothing to remove
+removed: removed
+your_subs: Your subs
+empty_subs: You not subscribes
+subs_canceled: Subscribe canceled
+added_sub: Add subscribe to account
+no_meaning: What you mean?

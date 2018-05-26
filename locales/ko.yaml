@@ -1,0 +1,43 @@
+greeting: 환영
+menu:
+  add_account: ✅ 계정을 추가
+  remove_account: ❌ 계정 삭제
+  show_accounts: 📝 계정 표시
+  settings: 🛠 설정
+settings: 여기 아무것도...
+ops:
+  transfer: 이전
+  sent: 전송
+  order_create: 주문 생성
+  sell: 팔다
+  receive: 받다
+  fill_order: 채우기 순서
+  pays: 지불하다
+  receives: 받다
+write_account: 이름을 적어주세요.
+cancel: 취소
+delete_account: 삭제할 계정을 선택하십시오.
+not_accounts: 너는 제거 할 것이 없다.
+removed: 제거 된
+your_subs: 귀하의 구독자
+empty_subs: 구독하지 않았습니다.
+subs_canceled: 구독 취소됨
+added_sub: 계정에 가입 추가
+no_meaning: 무슨 소리 야?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

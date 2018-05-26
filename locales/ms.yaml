@@ -1,0 +1,26 @@
+greeting: Selamat datang
+menu:
+  add_account: ✅ Tambah akaun
+  remove_account: ❌ Keluarkan Akaun
+  show_accounts: 📝 Tunjukkan Akaun
+  settings: 🛠 Tetapan
+settings: Tiada apa di sini...
+ops:
+  transfer: Pemindahan
+  sent: dihantar kepada
+  order_create: Buat pesanan
+  sell: menjual
+  receive: terima
+  fill_order: Isikan pesanan
+  pays: membayar
+  receives: menerima
+write_account: Sila, tulis akaun nama
+cancel: Batalkan
+delete_account: Sila pilih akaun untuk memadam
+not_accounts: Anda tiada apa-apa untuk dikeluarkan
+removed: dikeluarkan
+your_subs: Pelanggan anda
+empty_subs: Anda tidak melanggan
+subs_canceled: Langgan dibatalkan
+added_sub: Tambah melanggan akaun
+no_meaning: Apa yang awak maksudkan?

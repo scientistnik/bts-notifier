@@ -1,0 +1,26 @@
+greeting: Welkom
+menu:
+  add_account: ✅ Account toevoegen
+  remove_account: ❌ Verwijder account
+  show_accounts: 📝 Accounts tonen
+  settings: 🛠 instellingen
+settings: Niets hier...
+ops:
+  transfer: Overdracht
+  sent: verzonden naar
+  order_create: Bestel maken
+  sell: verkopen
+  receive: te ontvangen
+  fill_order: Vul de bestelling in
+  pays: pays
+  receives: ontvangt
+write_account: Schrijf alsjeblieft een naamaccount
+cancel: Annuleer
+delete_account: Selecteer alstublieft een account om te verwijderen
+not_accounts: U hoeft niets te verwijderen
+removed: verwijderd
+your_subs: Je subs
+empty_subs: Je onderschrijft niet
+subs_canceled: Abonnement geannuleerd
+added_sub: Abonnement op account toevoegen
+no_meaning: Wat bedoel je?
