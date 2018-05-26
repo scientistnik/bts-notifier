@@ -30,7 +30,7 @@ class Database {
   }
 
   isWaitSub(id) {
-    return this.users[id].sub && Date.now() - this.users[id].sub < 60 * 60 * 1000
+    return this.users[id] && this.users[id].sub && Date.now() - this.users[id].sub < 60 * 60 * 1000
   }
 
   clearSub(id) {
