@@ -2,8 +2,8 @@ const fs = require('fs');
 
 class Database {
   constructor() {
-    this.users = JSON.parse(fs.readFileSync("./users.db"))
-    this.subs = JSON.parse(fs.readFileSync("./subs.db"))
+    this.users = JSON.parse(fs.readFileSync("./users.db")) || {}
+    this.subs = JSON.parse(fs.readFileSync("./subs.db")) || {}
   }
 
   waitSub(id) {
@@ -40,9 +40,10 @@ class Database {
 
   addSubs(acc, id) {
     this.subs[acc] = this.subs[acc] || {ids: []}
-    this.subs[acc].ids.push(id)
-
-    this.subsSave()
+    if (!this.subs[acc].ids.includes(id)) {
+      this.subs[acc].ids.push(id)
+      this.subsSave()
+    }
   }
 
   removeSubs(acc, id) {

@@ -41,6 +41,14 @@ async function start() {
   bot.startPolling()
 }
 
+async function restart() {
+  BitShares.reconnect()
+  db.getAllSubs().forEach(acc => {
+    funcs[acc] = funcs[acc] || getSubsFunc(acc)
+    BitShares.subscribe('account',funcs[acc], acc);
+  })
+}
+
 function getSubsFunc(acc) {
   return async function() {
     let messages = {}
@@ -173,5 +181,6 @@ process.on('unhandledRejection', (reason, p) => {
   let error = `Unhandled Rejection at: ${p} reason: ${reason}`
   console.log(error);
   bot.telegram.sendMessage(config.telegram.admin, error)
+  restart()
 });
 
