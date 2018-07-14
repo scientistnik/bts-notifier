@@ -6,7 +6,8 @@ const
   I18n = require('telegraf-i18n'),
   Markup = require('telegraf/markup'),
   db = require('./database.js'),
-  config = require('./config.js');
+  config = require('./config.js'),
+  fs = require('fs');
 
 var bot, funcs = {}, i18n;
 
@@ -74,6 +75,7 @@ async function parseOperations(acc, lang, ops) {
   for(i in ops) {
     let op = ops[ops.length - 1 - i];
     console.log(op)
+    fs.appendFile('debug.log', `[${new Date()}] - ${JSON.stringify(op)}\n`,() => console.log("write to file"))
 
     switch(op[0]) {
       case 0: // transfer
