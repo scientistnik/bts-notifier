@@ -64,6 +64,7 @@ function getSubsFunc(acc) {
       if (messages[lang].length == 0)
         return
 
+      console.log(`send [${new Date()}] id:${id} length:${messages[lang].length}`)
       bot.telegram.sendMessage(id, messages[lang], {parse_mode: 'markdown'})
     }
   }

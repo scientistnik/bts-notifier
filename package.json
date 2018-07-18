@@ -6,7 +6,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "btsdex": "^0.4.1",
+    "btsdex": "^0.4.4",
     "telegraf": "^3.21.0",
     "telegraf-i18n": "^6.1.0"
   }
