@@ -12,10 +12,15 @@ $ git clone git@github.com:scientistnik/bts-notifier.git
 $ cd bts-notifier
 $ npm install
 ```
-- Configurete bot in file `config.js`: set `telegram-token` and `admin-id`
+- Configurete bot in file `.env`: set `TELEGRAM_TOKEN` and if you want `TELEGRAM_ADMIN` (see `.env-template`)
 - Start bot:
 ```
 $ ./main.js
+```
+- if you want, start in docker:
+```
+$ docker build -t bts-notifier
+$ docker run -b bts-notifier
 ```
 ## Contributing
 Bug reports and pull requests are welcome on GitHub.
