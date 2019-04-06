@@ -6,12 +6,13 @@ const
   I18n = require('telegraf-i18n'),
   Markup = require('telegraf/markup'),
   db = require('./database.js'),
-  config = require('./config.js'),
   fs = require('fs');
+
+require('dotenv').config()
 
 var bot, funcs = {}, i18n;
 
-BitShares.init(config.node);
+BitShares.node = process.env.BITSHARES_NODE
 BitShares.subscribe('connected',start);
 
 async function start() {
@@ -21,7 +22,7 @@ async function start() {
     BitShares.subscribe('account',funcs[acc], acc);
   })
 
-  bot = new Telegraf(config.telegram.token)
+  bot = new Telegraf(process.env.TELEGRAM_TOKEN)
 
   i18n = new I18n({
     directory: `${__dirname}/locales`,
@@ -31,6 +32,14 @@ async function start() {
   bot.use(i18n.middleware())
 
   bot.start(greeting)
+
+  bot.command('help', helpCommand)
+  bot.command('lang', langCommand)
+  bot.command('add', addWaitAcc)
+  bot.command('remove', removeWaitAcc)
+  bot.command('show', showAcc)
+  bot.command('settings', settings)
+
   bot.hears(I18n.match('menu.add_account'), addWaitAcc)
   bot.hears(I18n.match('menu.remove_account'), removeWaitAcc)
   bot.hears(I18n.match('menu.show_accounts'), showAcc)
@@ -39,7 +48,23 @@ async function start() {
   bot.action(/remove_.*/, removeSub)
   bot.on('text', getText)
 
-  bot.startPolling()
+  //bot.startPolling()
+  bot.launch()
+}
+
+function helpCommand(ctx) {
+  let id = ctx.chat.id,
+    text = ctx.message.text;
+
+  db.setLang(id, text.split(" ")[1]) 
+  ctx.reply('/help - this text\n/lang <en> - set locale\n/add - add account\n/remove - remove account\n/show - show accounts\n/settings - show settings')
+}
+
+function langCommand(ctx) {
+  let id = ctx.chat.id,
+    text = ctx.message.text;
+
+  db.setLang(id, text.split(" ")[1]) 
 }
 
 async function restart() {
@@ -64,8 +89,7 @@ function getSubsFunc(acc) {
       if (messages[lang].length == 0)
         return
 
-      console.log(`send [${new Date()}] id:${id} length:${messages[lang].length}`)
-      bot.telegram.sendMessage(id, messages[lang], {parse_mode: 'markdown'})
+      bot.telegram.sendMessage(id, messages[lang], {parse_mode: 'markdown'}).catch(console.error)
     }
   }
 }
@@ -75,8 +99,6 @@ async function parseOperations(acc, lang, ops) {
 
   for(i in ops) {
     let op = ops[ops.length - 1 - i];
-    console.log(op)
-    fs.appendFile('debug.log', `[${new Date()}] - ${JSON.stringify(op)}\n`,() => console.log("write to file"))
 
     switch(op[0]) {
       case 0: // transfer
@@ -141,6 +163,7 @@ function removeSub(ctx) {
 }
 
 function showAcc(ctx) {
+  console.log("Hello showAcc")
   let accs = db.getSubs(ctx.chat.id)
   ctx.replyWithMarkdown(accs.length > 0 ? `${ctx.i18n.t('your_subs')}: *${accs}*` : ctx.i18n.t('empty_subs'))
 }
@@ -175,15 +198,23 @@ async function getText(ctx) {
     let msg = `${JSON.stringify(ctx.chat)} write:\n *${text}*`;
     console.log(msg)
 
-    bot.telegram.sendMessage(config.telegram.admin, msg,{parse_mode: 'markdown'});
+    if (isSetAdmin())
+      bot.telegram.sendMessage(process.env.TELEGRAM_ADMIN, msg,{parse_mode: 'markdown'}).catch(console.error)
     ctx.reply(ctx.i18n.t('no_meaning'))
   }
 }
 
+function isSetAdmin() {
+  return /^-?\d+$/.test(process.env.TELEGRAM_ADMIN)
+}
+
+
 process.on('unhandledRejection', (reason, p) => {
   let error = `Unhandled Rejection at: ${p} reason: ${reason}`
   console.log(error);
-  bot.telegram.sendMessage(config.telegram.admin, error)
-  restart()
+  if (isSetAdmin())
+    bot.telegram.sendMessage(process.env.TELEGRAM_ADMIN, error).catch(console.error)
+  //restart()
+  process.exit(1)
 });
 
