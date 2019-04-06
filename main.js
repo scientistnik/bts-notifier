@@ -163,7 +163,6 @@ function removeSub(ctx) {
 }
 
 function showAcc(ctx) {
-  console.log("Hello showAcc")
   let accs = db.getSubs(ctx.chat.id)
   ctx.replyWithMarkdown(accs.length > 0 ? `${ctx.i18n.t('your_subs')}: *${accs}*` : ctx.i18n.t('empty_subs'))
 }
