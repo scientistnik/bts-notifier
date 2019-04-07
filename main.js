@@ -133,6 +133,7 @@ function greeting(ctx) {
     [ctx.i18n.t('menu.show_accounts'), ctx.i18n.t('menu.settings')]
   ]
   ctx.reply(ctx.i18n.t('greeting'), Markup.keyboard(buttons).extra()).catch(console.error)
+  helpCommand(ctx)
 }
 
 function settings(ctx) {
