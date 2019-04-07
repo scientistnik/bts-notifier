@@ -13,6 +13,8 @@ class Database {
   }
 
   setLang(id, lang) {
+    this.users[id] = this.users[id] || {}
+
     this.users[id].lang = lang
     this.usersSave()
   }

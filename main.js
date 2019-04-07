@@ -48,16 +48,12 @@ async function start() {
   bot.action(/remove_.*/, removeSub)
   bot.on('text', getText)
 
-  //bot.startPolling()
   bot.launch()
 }
 
 function helpCommand(ctx) {
-  let id = ctx.chat.id,
-    text = ctx.message.text;
+  ctx.reply('/help - this text\n/lang <en> - set locale\n/add - add account\n/remove - remove account\n/show - show accounts\n/settings - show settings').catch(console.error)
 
-  db.setLang(id, text.split(" ")[1]) 
-  ctx.reply('/help - this text\n/lang <en> - set locale\n/add - add account\n/remove - remove account\n/show - show accounts\n/settings - show settings')
 }
 
 function langCommand(ctx) {
@@ -81,7 +77,7 @@ function getSubsFunc(acc) {
 
     for(index in db.subs[acc].ids) {
       let id = db.subs[acc].ids[index],
-          lang = db.users[id].lang;
+          lang = (db.users[id] && db.users[id].lang) || 'en';
 
       if (!messages[lang])
         messages[lang] = await parseOperations(acc, lang, arguments[0].map(history => history.op));
@@ -125,6 +121,7 @@ async function parseOperations(acc, lang, ops) {
 
         msg += `🔔 *${i18n.t(lang,'ops.fill_order')}*:\n ${i18n.t(lang,'ops.pays')} ${p_amount} ${pay_param.asset.symbol}, ${i18n.t(lang,'ops.receives')} ${re_amount} ${receive_param.asset.symbol}\n`;
         break;
+      default: msg += `Some operation: ${JSON.stringify(op)}`
     }
   }
   return msg.length > 0 ? `‼️ 🙍‍♂️ *${acc}* ‼️\n\n${msg}` : ''
@@ -135,17 +132,19 @@ function greeting(ctx) {
     [ctx.i18n.t('menu.add_account'), ctx.i18n.t('menu.remove_account')],
     [ctx.i18n.t('menu.show_accounts'), ctx.i18n.t('menu.settings')]
   ]
-  ctx.reply(ctx.i18n.t('greeting'), Markup.keyboard(buttons).extra())
+  ctx.reply(ctx.i18n.t('greeting'), Markup.keyboard(buttons).extra()).catch(console.error)
 }
 
 function settings(ctx) {
-  ctx.reply(ctx.i18n.t('settings'))
+  ctx.reply(ctx.i18n.t('settings')).catch(console.error)
+
 }
 
 function addWaitAcc(ctx) {
   db.waitSub(ctx.chat.id)
   let button = Markup.callbackButton(ctx.i18n.t('cancel'), 'cancel_wait_sub')
-  ctx.reply(ctx.i18n.t('write_account'), Markup.inlineKeyboard([button]).extra())
+  ctx.reply(ctx.i18n.t('write_account'), Markup.inlineKeyboard([button]).extra()).catch(console.error)
+
 }
 
 function removeWaitAcc(ctx) {
@@ -153,23 +152,27 @@ function removeWaitAcc(ctx) {
       buttons = accs.map(acc => [Markup.callbackButton(`❌ ${acc}`, `remove_${acc}`)]);
 
   ctx.reply(accs.length > 0 ? ctx.i18n.t('delete_account') : ctx.i18n.t('not_accounts'), 
-    Markup.inlineKeyboard(buttons).extra())
+    Markup.inlineKeyboard(buttons).extra()).catch(console.error)
+
 }
 
 function removeSub(ctx) {
   let acc = ctx.update.callback_query.data.substring(7)
   db.removeSubs(acc, ctx.from.id)
-  ctx.replyWithMarkdown(`*${acc}* ${ctx.i18n.t('removed')}`)
+  ctx.replyWithMarkdown(`*${acc}* ${ctx.i18n.t('removed')}`).catch(console.error)
+
 }
 
 function showAcc(ctx) {
   let accs = db.getSubs(ctx.chat.id)
-  ctx.replyWithMarkdown(accs.length > 0 ? `${ctx.i18n.t('your_subs')}: *${accs}*` : ctx.i18n.t('empty_subs'))
+  ctx.replyWithMarkdown(accs.length > 0 ? `${ctx.i18n.t('your_subs')}: *${accs}*` : ctx.i18n.t('empty_subs')).catch(console.error)
+
 }
 
 function cancelSub(ctx) {
   db.clearSub(ctx.from.id)
-  ctx.reply(ctx.i18n.t('subs_canceled'))
+  ctx.reply(ctx.i18n.t('subs_canceled')).catch(console.error)
+
 }
 
 async function getText(ctx) {
@@ -188,10 +191,12 @@ async function getText(ctx) {
         BitShares.subscribe('account',funcs[text], text);
       }
 
-      ctx.replyWithMarkdown(`${ctx.i18n.t('added_sub')} *${text}*`)
+      ctx.replyWithMarkdown(`${ctx.i18n.t('added_sub')} *${text}*`).catch(console.error)
+
     } catch(e) {
       let button = Markup.callbackButton(ctx.i18n.t('cancel'), 'cancel_wait_sub')
-      ctx.reply(`${e}`, Markup.inlineKeyboard([button]).extra())
+      ctx.reply(`${e}`, Markup.inlineKeyboard([button]).extra()).catch(console.error)
+
     }
   } else {
     let msg = `${JSON.stringify(ctx.chat)} write:\n *${text}*`;
@@ -199,7 +204,8 @@ async function getText(ctx) {
 
     if (isSetAdmin())
       bot.telegram.sendMessage(process.env.TELEGRAM_ADMIN, msg,{parse_mode: 'markdown'}).catch(console.error)
-    ctx.reply(ctx.i18n.t('no_meaning'))
+    ctx.reply(ctx.i18n.t('no_meaning')).catch(console.error)
+
   }
 }
 
@@ -211,9 +217,11 @@ function isSetAdmin() {
 process.on('unhandledRejection', (reason, p) => {
   let error = `Unhandled Rejection at: ${p} reason: ${reason}`
   console.log(error);
-  if (isSetAdmin())
-    bot.telegram.sendMessage(process.env.TELEGRAM_ADMIN, error).catch(console.error)
-  //restart()
-  process.exit(1)
+  if (isSetAdmin()) {
+    bot.telegram.sendMessage(process.env.TELEGRAM_ADMIN, error).catch(console.error).finally(() => process.exit(1))
+  }
+  else {
+    process.exit(1)
+  }
 });
 
